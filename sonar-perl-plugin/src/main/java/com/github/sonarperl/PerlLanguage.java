@@ -1,7 +1,10 @@
 package com.github.sonarperl;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 
@@ -12,27 +15,23 @@ public final class PerlLanguage extends AbstractLanguage {
 
     public static final String NAME = "Perl";
     public static final String KEY = "perl";
-
     private final Configuration config;
+
+    public static final List<String> FILE_SUFFIXES = List.of(".pl", ".pm", ".t");
+    public static final String FILE_SUFFIXES_KEY = "sonar.perl.file.suffixes";
 
     public PerlLanguage(Configuration config) {
         super(KEY, NAME);
         this.config = config;
     }
 
-    @Override
     public String[] getFileSuffixes() {
-        String[] suffixes = filterEmptyStrings(config.getStringArray(PerlPlugin.FILE_SUFFIXES_KEY));
-        if (suffixes.length == 0) {
-            suffixes = PerlPlugin.DEFAULT_FILE_SUFFIXES.split(",\\s*");
-        }
-        return suffixes;
-    }
-
-    private String[] filterEmptyStrings(String[] stringArray) {
-        return Arrays
-                .stream(stringArray)
-                .toArray(size -> new String[size]);
+        final List<String> providedFilesSuffixes = Arrays.stream(config.getStringArray(FILE_SUFFIXES_KEY))
+                .map(String::trim)
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.toList());
+        final List<String> filesSuffixes = providedFilesSuffixes.isEmpty() ? FILE_SUFFIXES : providedFilesSuffixes;
+        return filesSuffixes.toArray(new String[0]);
     }
 
     /**
@@ -51,11 +50,6 @@ public final class PerlLanguage extends AbstractLanguage {
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean equals(Object o) { // NOSONAR - use equals from AbstractLanguage
-        return super.equals(o);
     }
 
 }
