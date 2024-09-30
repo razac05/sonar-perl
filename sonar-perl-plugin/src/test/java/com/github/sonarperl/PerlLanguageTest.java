@@ -10,7 +10,7 @@ public class PerlLanguageTest {
     @Test
     public void testDefaults() {
         PerlLanguage lang = new PerlLanguage(new MapSettings().asConfig());
-        assertThat(lang.getFileSuffixes()).isEqualTo(new String[] {"pm","pl","t"});
+        assertThat(lang.getFileSuffixes()).isEqualTo(new String[] {".pl", ".pm", ".t"});
         assertThat(lang.hasValidSuffixes("my.file")).isFalse();
         assertThat(lang.hasValidSuffixes("my.pm")).isTrue();
     }
@@ -18,7 +18,7 @@ public class PerlLanguageTest {
     @Test
     public void testCustomSettings() {
         MapSettings settings = new MapSettings();
-        settings.setProperty(PerlLanguage.FILE_SUFFIXES_KEY, "file,,other");
+        settings.setProperty(PerlLanguage.FILE_SUFFIXES_KEY, new String[] {"file","","other"});
         PerlLanguage lang = new PerlLanguage(settings.asConfig());
         assertThat(lang.getFileSuffixes()).isEqualTo(new String[] {"file","other"});
         assertThat(lang.hasValidSuffixes("my.file")).isTrue();
