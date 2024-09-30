@@ -19,7 +19,7 @@ public class PerlLanguageTest {
     @Test
     public void testCustomSettings() {
         MapSettings settings = new MapSettings();
-        settings.setProperty(PerlLanguage.FILE_SUFFIXES_KEY, "file,,other"));
+        settings.setProperty(PerlLanguage.FILE_SUFFIXES_KEY, "file,,other");
         PerlLanguage lang = new PerlLanguage(settings.asConfig());
         assertThat(lang.getFileSuffixes()).isEqualTo(Arrays.asList("file","other"));
         assertThat(lang.hasValidSuffixes("my.file")).isTrue();
