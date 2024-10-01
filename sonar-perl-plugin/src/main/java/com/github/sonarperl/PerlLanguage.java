@@ -45,7 +45,7 @@ public final class PerlLanguage extends AbstractLanguage {
     public boolean hasValidSuffixes(String fileName) {
         String pathLowerCase = fileName.toLowerCase();
         for (String suffix : getFileSuffixes()) {
-            if (pathLowerCase.endsWith("." + suffix.toLowerCase())) {
+            if (pathLowerCase.endsWith(suffix.toLowerCase())) {
                 return true;
             }
         }
