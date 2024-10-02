@@ -28,8 +28,7 @@ public final class PerlLanguage extends AbstractLanguage {
     public String[] getFileSuffixes() {
         final List<String> providedFilesSuffixes = Arrays.stream(config.getStringArray(FILE_SUFFIXES_KEY))
                 .map(String::trim)
-                .filter(StringUtils::isNotBlank)
-                .collect(Collectors.toList());
+                .filter(StringUtils::isNotBlank).toList();
         final List<String> filesSuffixes = providedFilesSuffixes.isEmpty() ? FILE_SUFFIXES : providedFilesSuffixes;
         return filesSuffixes.toArray(new String[0]);
     }

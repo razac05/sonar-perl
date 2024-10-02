@@ -13,6 +13,7 @@ import com.github.sonarperl.tap.TestHarnessArchiveProperties;
 import com.github.sonarperl.tap.TestHarnessLoaderSensor;
 
 public class PerlPlugin implements Plugin {
+    public static final String CATEGORY_NAME = "Community Perl";
 
     public void define(Context context) {
         context.addExtensions(
@@ -29,7 +30,7 @@ public class PerlPlugin implements Plugin {
                 .name("File Suffixes")
                 .description("Comma-separated list of suffixes for files to analyze.")
                 .defaultValue(String.join(",", PerlLanguage.FILE_SUFFIXES))
-                .category("Community Perl")
+                .category(CATEGORY_NAME)
                 .subCategory("General")
                 .onQualifiers(Qualifiers.PROJECT)
                 .type(PropertyType.STRING)
@@ -39,7 +40,7 @@ public class PerlPlugin implements Plugin {
                 .name("PerlCritic Report Location")
                 .description("Location of perlcritic report file. Can be generated using this command-line: perlcritic --quiet --verbose \"%f~|~%s~|~%l~|~%c~|~%m~|~%e~|~%p~||~%n\"")
                 .defaultValue(PerlCriticProperties.PERLCRITIC_REPORT_PATH_DEFAULT)
-                .category("Community Perl")
+                .category(CATEGORY_NAME)
                 .subCategory("Perl::Critic")
                 .onQualifiers(Qualifiers.PROJECT)
                 .type(PropertyType.STRING)
@@ -48,7 +49,7 @@ public class PerlPlugin implements Plugin {
                 .name("Test::Harness Archive Location")
                 .description("Location of Test::Harness::Archive report file. Can be generated using this command-line: prove -t -a testReport.tgz")
                 .defaultValue(TestHarnessArchiveProperties.HARNESS_ARCHIVE_PATH_DEFAULT)
-                .category("Community Perl")
+                .category(CATEGORY_NAME)
                 .subCategory("Test::Harness")
                 .onQualifiers(Qualifiers.PROJECT)
                 .type(PropertyType.STRING)

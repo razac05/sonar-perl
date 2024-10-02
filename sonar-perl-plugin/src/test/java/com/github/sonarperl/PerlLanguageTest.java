@@ -1,8 +1,6 @@
 package com.github.sonarperl;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.util.List;
-import java.util.Arrays; 
 import org.junit.Test;
 import org.sonar.api.config.internal.MapSettings;
 
