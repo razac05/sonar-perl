@@ -43,4 +43,4 @@ jobs:
         # with permissions to create releases in the other repo
         token: ${{ secrets.GH_RELEASE_TOKEN }}
       env:
-        GITHUB_REPOSITORY: sonar-perl/sonar-perl
+        GITHUB_REPOSITORY: $GITHUB_REPOSITORY
