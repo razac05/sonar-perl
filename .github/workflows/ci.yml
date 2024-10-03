@@ -45,4 +45,4 @@ jobs:
         # with permissions to create releases in the other repo
         token: ${{ secrets.GH_RELEASE_TOKEN }}
       env:
-        GITHUB_REPOSITORY: $GITHUB_REPOSITORY
+        GITHUB_REPOSITORY: ${{ github.repository }}
