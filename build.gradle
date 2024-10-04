@@ -25,7 +25,7 @@ sonar {
     properties {
         property "sonar.projectKey", System.env['SONAR_PROJECT_KEY'] ?: "sonar-perl_sonar-perl"
         property "sonar.organization", System.env['SONAR_ORG'] ?: "sonar-perl"
-        property "sonar.branch.name", System.env['SONAR_SCAN_BRANCH'] ?: "master"
+        // property "sonar.branch.name", System.env['SONAR_SCAN_BRANCH'] ?: "master"
         property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.verbose", "true"
         property "sonar.scm.provider", "git"
