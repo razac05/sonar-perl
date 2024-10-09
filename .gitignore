@@ -4,3 +4,4 @@ build/
 target/
 perl/sample-project/Makefile
 out/
+sonar-scanner-6.*-linux-x64/
