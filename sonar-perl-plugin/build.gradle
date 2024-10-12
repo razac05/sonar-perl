@@ -1,6 +1,6 @@
 plugins {
     id "java-library"
-    id 'com.bmuschko.docker-remote-api' version '9.3.1'
+    id 'com.bmuschko.docker-remote-api' version '9.4.0'
     id "jacoco"
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
@@ -101,18 +101,36 @@ tasks.register('copyDockerfile', Copy) {
     into 'build/docker'
 }
 
+tasks.register('copyDockerStartup', Copy) {
+    group = 'Docker'
+    description = 'Move startup script.'
+    dependsOn copyDockerfile, shadowJar
+    from "./" 
+    include "startup.sh"
+    into "build/docker/"
+}
+
 tasks.register('copyDockerTargetArtifacts', Copy) {
     group = 'Docker'
     description = 'Assembles contents for docker image.'
-    dependsOn copyDockerfile, shadowJar
+    dependsOn copyDockerStartup, shadowJar
     from "build/libs/" 
     include "*-all.jar"
     into "build/docker/build/libs/"
 }
 
+tasks.register('copySampleProject', Copy) {
+    group = 'Docker'
+    description = 'Copy sample project for code scan'
+    dependsOn copyDockerTargetArtifacts
+    from "../perl/sample-project/" 
+    include "**/*"
+    into "build/docker/build/sample-project/"
+}
+
 tasks.register('buildDockerImage', DockerBuildImage) {
     description = 'Builds a new docker image.'
-    dependsOn copyDockerTargetArtifacts
+    dependsOn copySampleProject
     inputDir = file('build/docker')
     images.add("ghcr.io/sonar-perl/sonar-perl:latest")
     noCache = true
