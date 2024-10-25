@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+CODEBASE_ROOT=$@
+
 set -m
 
-wget -O /opt/sonarqube/extensions/plugins/sonar-cnes-report-5.0.0.jar https://github.com/cnescatlab/sonar-cnes-report/releases/download/5.0.0/sonar-cnes-report-5.0.0.jar 
+wget -q -O /opt/sonarqube/extensions/plugins/sonar-cnes-report-5.0.0.jar https://github.com/cnescatlab/sonar-cnes-report/releases/download/5.0.0/sonar-cnes-report-5.0.0.jar 
 
 docker/entrypoint.sh &
 
@@ -24,13 +26,20 @@ resp=$(curl -s -X POST -u admin:admin http://127.0.0.1:9000/api/user_tokens/gene
 export SONAR_TOKEN=$(echo $resp | grep -o '"token":"[^"]*' | grep -o '[^"]*$')
 echo "export SONAR_TOKEN=$(echo $resp | grep -o '"token":"[^"]*' | grep -o '[^"]*$')" >> /home/sonarqube/.profile
 
+# Setup SonarQube scan
+cd $CODEBASE_ROOT
+SONAR_PROJECT_KEY=$(awk '{ print $2 }' FS='sonar.projectKey=' sonar-project.properties | awk '1' RS='')
+echo "export SONAR_PROJECT_KEY=$(awk '{ print $2 }' FS='sonar.projectKey=' sonar-project.properties | awk '1' RS='')" >> /home/sonarqube/.profile
+
+PERL_SRC=$(awk '{ print $2 }' FS='sonar.sources=' sonar-project.properties | awk '1' RS='')
+echo "export PERL_SRC=$(awk '{ print $2 }' FS='sonar.sources=' sonar-project.properties | awk '1' RS='')" >> /home/sonarqube/.profile
+
+perlcritic --harsh $PERL_SRC > perlcritic_report.txt
+
 # Run SonarQube scan
-cd /codebase
 $SONAR_SCANNER -Dsonar.host.url=http://127.0.0.1:9000  -Dsonar.token=$SONAR_TOKEN
 
 # Export SonarQube report data
-SONAR_PROJECT_KEY=$(awk '{ print $2 }' FS='sonar.projectKey=' sonar-project.properties | awk '1' RS='')
-echo "export SONAR_PROJECT_KEY=$(awk '{ print $2 }' FS='sonar.projectKey=' sonar-project.properties | awk '1' RS='')" >> /home/sonarqube/.profile
-java -jar /opt/sonarqube/extensions/plugins/sonar-cnes-report-5.0.0.jar -p $SONAR_PROJECT_KEY -t $SONAR_TOKEN -o /codebase/SAST/
+java -jar /opt/sonarqube/extensions/plugins/sonar-cnes-report-5.0.0.jar -p $SONAR_PROJECT_KEY -t $SONAR_TOKEN -o $CODEBASE_ROOT/SAST/
 
-fg %1
+#fg %1
