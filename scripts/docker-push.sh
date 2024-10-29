@@ -2,7 +2,7 @@
 
 set -e # Exit with nonzero exit code if anything fails
 
-export REPO=ghcr.io/sonar-perl/sonar-perl
+export REPO=ghcr.io/$GITHUB_REPOSITORY
 
 RAW_REF=${GITHUB_REF##*/}
 

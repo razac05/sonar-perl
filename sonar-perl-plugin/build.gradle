@@ -132,7 +132,7 @@ tasks.register('buildDockerImage', DockerBuildImage) {
     description = 'Builds a new docker image.'
     dependsOn copySampleProject
     inputDir = file('build/docker')
-    images.add("ghcr.io/sonar-perl/sonar-perl:latest")
+    images.add("ghcr.io/" + (System.env['SONAR_ORG'] ?: "sonar-perl") + "/sonar-perl:latest")
     noCache = true
 }
 
@@ -163,5 +163,4 @@ tasks.register('stopDockerContainer', DockerStopContainer) {
 
 tasks.register('stop') {}
 stop.dependsOn stopDockerContainer
-
 
